@@ -9,5 +9,8 @@
     python setup.py build
     python setup.py install 
     pip install -e .
-    python src/run.py
+```
+## Usage
+```
+  python src/run.py
 ```
