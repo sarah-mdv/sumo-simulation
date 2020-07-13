@@ -132,3 +132,4 @@ dmypy.json
 sumo_env/
 .idea/
 scenario/
+data/
