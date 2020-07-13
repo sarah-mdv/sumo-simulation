@@ -1,2 +1,19 @@
+appdirs==1.4.4
+certifi==2020.6.20
+distlib==0.3.1
+filelock==3.0.12
+importlib-metadata==1.7.0
+importlib-resources==3.0.0
 numpy==1.19.0
-pkg-resources==0.0.0
+pandas==1.0.5
+pathlib==1.0.1
+pipenv==2020.6.2
+python-dateutil==2.8.1
+pytz==2020.1
+six==1.15.0
+-e git+git@github.com:sarah-mdv/sumo-simulation.git@973e69a0d486df223cbddc6a01b2075995c04416#egg=sumo_simulation
+sumolib==1.6.0
+traci==1.6.0
+virtualenv==20.0.26
+virtualenv-clone==0.5.4
+zipp==3.1.0
