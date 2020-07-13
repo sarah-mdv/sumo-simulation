@@ -130,3 +130,5 @@ dmypy.json
 
 # Virtual environment
 sumo_env/
+.idea/
+scenario/
