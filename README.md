@@ -12,5 +12,5 @@
 ```
 ## Usage
 ```
-  python src/run.py
+  python src/run.py --nogui
 ```
