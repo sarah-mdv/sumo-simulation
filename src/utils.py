@@ -1,18 +1,22 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+from pathlib import Path
 import math
 import logging
-import pathlib as Path
 from datetime import datetime
 import optparse
 
 EARTH_RADIUS = 6371
 
+LOGGER = logging.getLogger(__name__)
+
 SRC_DIR = Path(__file__).parent.resolve()
 DATA_DIR = SRC_DIR / Path("data")
 LOG_DIR = SRC_DIR / Path("logs")
 SIM_DIR = SRC_DIR / Path("scenario")
+
+MIN_SIMULATION_STEPS = 10000
 
 def _setup_logger(log_level: int) -> None:
     """
