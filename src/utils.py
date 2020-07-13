@@ -18,6 +18,8 @@ SIM_DIR = SRC_DIR / Path("scenario")
 
 MIN_SIMULATION_STEPS = 10000
 
+ACCEPTED_VEHICLES = {"taxi", "passenger", "delivery", "truck", "evehicle", "motorcycle"}
+
 def _setup_logger(log_level: int) -> None:
     """
     Setting up logger such that a console handler forwards log statements to

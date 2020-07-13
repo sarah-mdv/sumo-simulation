@@ -13,7 +13,8 @@ import traci
 from src.utils import (
     DATA_DIR,
     SIM_DIR,
-    MIN_SIMULATION_STEPS
+    MIN_SIMULATION_STEPS,
+    ACCEPTED_VEHICLES
 )
 
 # we need to import python modules from the $SUMO_HOME/tools directory
@@ -33,6 +34,7 @@ class Stat:
         self.sumoBinary = binary
         self.network = DATA_DIR/Path(network)
 
+        self.date = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
         self.set_outpath("stat")
         self.registered = set()
         self.results = pd.DataFrame({"Step":[]})
@@ -56,15 +58,17 @@ class Stat:
             step_results = self.get_data()
             self.results = self.results.append(step_results, ignore_index=True)
             self.step += 1
+            self._save_data_step(pd.DataFrame(step_results))
         self.stop()
-        self._save_data()
-
+        #self._save_data()
     def get_data(self):
         assert self.simulation_started
 
     def set_outpath(self, outpath:str):
-        date = datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
-        self.outpath = DATA_DIR/Path(f"{date}-{outpath}-results.csv")
+        self.outpath = DATA_DIR/Path(f"{self.date}-{outpath}-results.csv")
+
+    def _save_data_step(self, data):
+        data.to_csv(self.outpath, mode="a", index=False, header=False)
 
     def _save_data(self):
         LOGGER.debug(f"Saving data to {self.outpath}")
@@ -86,6 +90,7 @@ class SubscriptionStat(Stat):
         for c in cars:
             traci.vehicle.getSubscriptionResults(c)
 
+
 class FullCoordStat(Stat):
     def __init__(self, model:str, binary, network:str):
         super().__init__(model, binary, network)
@@ -103,9 +108,10 @@ class FullCoordStat(Stat):
             return []
         for v in all_vehicles:
             type = traci.vehicle.getTypeID(v)
-            x, y = traci.vehicle.getPosition(v)
-            lon, lat = traci.simulation.convertGeo(x, y)
-            step_results = step_results.append(pd.DataFrame({"Step": [traci.simulation.getTime()], "ID": [v],
+            if type in ACCEPTED_VEHICLES:
+                x, y = traci.vehicle.getPosition(v)
+                lon, lat = traci.simulation.convertGeo(x, y)
+                step_results = step_results.append(pd.DataFrame({"Step": [traci.simulation.getTime()], "ID": [v],
                                               "Type": [type], "Latitude": [lat], "Longitude": [lon]}), ignore_index=True)
         return step_results
 
