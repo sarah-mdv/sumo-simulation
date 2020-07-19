@@ -11,7 +11,7 @@ pipenv==2020.6.2
 python-dateutil==2.8.1
 pytz==2020.1
 six==1.15.0
--e git+git@github.com:sarah-mdv/sumo-simulation.git@973e69a0d486df223cbddc6a01b2075995c04416#egg=sumo_simulation
+-e git+git@github.com:sarah-mdv/sumo-simulation.git@4148629e7ff8658142cf1c8d3d9d47229105cc69#egg=sumo_simulation
 sumolib==1.6.0
 traci==1.6.0
 virtualenv==20.0.26
