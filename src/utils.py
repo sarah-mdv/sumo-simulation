@@ -18,7 +18,7 @@ SIM_DIR = SRC_DIR / Path("scenario")
 
 MIN_SIMULATION_STEPS = 10000
 
-ACCEPTED_VEHICLES = {"taxi", "passenger", "delivery", "truck", "evehicle", "motorcycle"}
+ACCEPTED_VEHICLES = {"taxi", "passenger", "delivery", "truck", "evehicle", "motorcycle", "bus"}
 
 def _setup_logger(log_level: int) -> None:
     """
