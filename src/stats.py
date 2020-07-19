@@ -56,7 +56,7 @@ class Stat:
         while traci.simulation.getMinExpectedNumber() > 0 and not self.simulation_finished:
             traci.simulationStep()
             step_results = self.get_data()
-            self.results = self.results.append(step_results, ignore_index=True)
+            #self.results = self.results.append(step_results, ignore_index=True)
             self.step += 1
             self._save_data_step(pd.DataFrame(step_results))
         self.stop()
@@ -100,18 +100,25 @@ class FullCoordStat(Stat):
     def get_data(self):
         super().get_data()
 
-        all_vehicles = set(traci.vehicle.getIDList())
-        step_results = pd.DataFrame({"Step":[], "ID":[], "Type":[], "Latitude":[], "Longitude":[]})
-        if not all_vehicles:
+        columns = ["Step", "ID", "Type", "Latitude", "Longitude"]
+
+        vehicle_ids = traci.vehicle.getIDList()
+        if not vehicle_ids:
             if self.step > MIN_SIMULATION_STEPS:
                 self.simulation_finished = True
             return []
-        for v in all_vehicles:
-            type = traci.vehicle.getTypeID(v)
-            if type in ACCEPTED_VEHICLES:
-                x, y = traci.vehicle.getPosition(v)
-                lon, lat = traci.simulation.convertGeo(x, y)
-                step_results = step_results.append(pd.DataFrame({"Step": [traci.simulation.getTime()], "ID": [v],
-                                              "Type": [type], "Latitude": [lat], "Longitude": [lon]}), ignore_index=True)
+        df = pd.Series(vehicle_ids)
+        time = traci.simulation.getTime()
+        step_results = df.apply(lambda x: self.per_car_data(x, columns, time))
+        step_results = step_results.query("Type in @ACCEPTED_VEHICLES")
+        if len(step_results.index) == 0:
+            return []
         return step_results
+
+    def per_car_data(self, v:str, cols, time):
+        x, y = traci.vehicle.getPosition(v)
+        lon, lat = traci.simulation.convertGeo(x, y)
+        type = traci.vehicle.getTypeID(v)
+        return pd.Series([time, v, type, lon, lat], index=cols)
+
 
