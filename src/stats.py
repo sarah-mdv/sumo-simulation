@@ -99,7 +99,8 @@ class FullCoordStat(Stat):
 
     def get_data(self):
         super().get_data()
-
+        if traci.simulation.getCurrentTime() < 32396:
+            return []
         columns = ["Step", "ID", "Type", "Latitude", "Longitude"]
 
         vehicle_ids = traci.vehicle.getIDList()
